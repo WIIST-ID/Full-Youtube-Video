@@ -30,8 +30,32 @@
   </style>
 </head>
 <body>
- <a href="intent://www.youtube.com/watch?v=5qD4uq2NF-c#Intent;package=com.google.android.youtube;scheme=https;end">
-  ▶ Tonton di YouTube
-</a>
+  <a id="youtubeLink" href="https://www.youtube.com/watch?v=5qD4uq2NF-c">
+    ▶ Tonton di YouTube
+  </a>
+
+  <script>
+    function detectDeviceAndSetLink() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isApple = /iphone|ipad|ipod|mac/.test(userAgent);
+      const isAndroid = /android/.test(userAgent);
+      
+      const link = document.getElementById('youtubeLink');
+      
+      if (isAndroid) {
+        // Android: Use intent scheme for YouTube app
+        link.href = 'intent://www.youtube.com/watch?v=5qD4uq2NF-c#Intent;package=com.google.android.youtube;scheme=https;end';
+      } else if (isApple) {
+        // Apple: Use YouTube scheme or standard https link
+        link.href = 'https://www.youtube.com/watch?v=5qD4uq2NF-c';
+      } else {
+        // Desktop or other: Use standard https link
+        link.href = 'https://www.youtube.com/watch?v=5qD4uq2NF-c';
+      }
+    }
+    
+    // Run on page load
+    detectDeviceAndSetLink();
+  </script>
 </body>
 </html>
