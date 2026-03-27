@@ -41,16 +41,27 @@
       const isAndroid = /android/.test(userAgent);
       
       const link = document.getElementById('youtubeLink');
+      const videoId = '5qD4uq2NF-c';
+      const youtubeWebUrl = 'https://www.youtube.com/watch?v=' + videoId;
       
       if (isAndroid) {
-        // Android: Use intent scheme for YouTube app with fallback to web browser
-        link.href = 'intent://www.youtube.com/watch?v=5qD4uq2NF-c#Intent;package=com.google.android.youtube;scheme=https;S.browser_fallback_url=https://www.youtube.com/watch?v=5qD4uq2NF-c;end';
+        // Android: Try YouTube app first, fallback to web browser
+        link.href = 'intent://www.youtube.com/watch?v=' + videoId + '#Intent;package=com.google.android.youtube;scheme=https;end';
+        link.onclick = function(e) {
+          e.preventDefault();
+          // Try the intent, if it fails redirect to web URL
+          window.location.href = link.href;
+          setTimeout(function() {
+            window.location.href = youtubeWebUrl;
+          }, 500);
+          return false;
+        };
       } else if (isApple) {
-        // Apple: Use YouTube scheme or standard https link
-        link.href = 'https://www.youtube.com/watch?v=5qD4uq2NF-c';
+        // Apple: Use YouTube app scheme or standard https link
+        link.href = 'https://www.youtube.com/watch?v=' + videoId;
       } else {
         // Desktop or other: Use standard https link
-        link.href = 'https://www.youtube.com/watch?v=5qD4uq2NF-c';
+        link.href = youtubeWebUrl;
       }
     }
     
