@@ -14,6 +14,30 @@
       height: 100vh;
       font-family: sans-serif;
     }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    .profile img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #FF0000;
+      object-fit: cover;
+    }
+    .profile h1 {
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
     a {
       background: #FF0000;
       color: white;
@@ -30,9 +54,15 @@
   </style>
 </head>
 <body>
-  <a id="youtubeLink" href="https://www.youtube.com/watch?v=5qD4uq2NF-c">
-    ▶ Tonton di YouTube
-  </a>
+  <div class="container">
+    <div class="profile">
+      <img src="1ind.png" alt="WIIST ID Profile Picture">
+      <h1>WIIST ID</h1>
+    </div>
+    <a id="youtubeLink" href="https://www.youtube.com/watch?v=5qD4uq2NF-c">
+      ▶ Tonton di YouTube
+    </a>
+  </div>
 
   <script>
     function detectDeviceAndSetLink() {
