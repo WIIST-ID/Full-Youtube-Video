@@ -3,86 +3,176 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="1ind.png">
   <title>Tonton Full Video</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
+     body {
       background: #222222;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      min-height: 100vh;
+      padding: 30px 16px;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      gap: 24px;
+      width: 100%;
+      max-width: 380px;
     }
     .profile {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
     .profile img {
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       border: 3px solid #FF0000;
       object-fit: cover;
-      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
     }
     .profile h1 {
       color: white;
-      font-size: 28px;
+      font-size: 24px;
       font-weight: bold;
     }
-    a {
-      background: #FF0000;
-      color: white;
-      text-decoration: none;
-      padding: 14px 40px;
-      border-radius: 999px;
-      font-size: 16px;
-      font-weight: 600;
+ 
+    .videos {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+ 
+    .video-card {
+      background: #2e2e2e;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease;
+    }
+    .video-card:hover {
+      transform: translateY(-2px);
+    }
+ 
+    .thumbnail-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+    .thumbnail-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .play-overlay {
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-      transform: scale(1);
-      animation: modernBlink 1.5s ease-in-out infinite;
+      justify-content: center;
+      background: transparent;
+      transition: background 0.2s;
     }
-    a:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
-      background: #e60000;
+    .video-card:hover .play-overlay {
+      background: rgba(0,0,0,0.15);
+    }
+    .play-icon {
+      width: 52px;
+      height: 52px;
+      background: #FF0000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 12px rgba(255,0,0,0.5);
+    }
+    .play-icon svg {
+      margin-left: 4px;
+    }
+ 
+    .badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: #FF0000;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+ 
+    .card-footer {
+      padding: 12px 14px 14px;
+    }
+    .card-label {
+      color: #aaa;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+    }
+    .card-title {
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: 8px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 20px;
+    }
+    .card-title.loading {
+      background: #3a3a3a;
+      border-radius: 6px;
+      color: transparent;
+      animation: shimmer 1.2s infinite;
+      width: 80%;
+      height: 18px;
+    }
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    .card-cta {
+      color: #FF0000;
+      font-size: 13px;
+      font-weight: 700;
+    }
+ 
+    /* make the whole card clickable */
+    .video-card a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      font-size: inherit;
+      font-weight: inherit;
+      box-shadow: none;
       animation: none;
+      gap: 0;
     }
-    a:active {
-      transform: scale(0.98);
-      box-shadow: 0 2px 8px rgba(255, 0, 0, 0.3);
-    }
-    @keyframes modernBlink {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 0.7;
-        transform: scale(1.02);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    a:focus {
-      outline: none;
+    .video-card a:hover {
+      transform: none;
+      box-shadow: none;
+      background: none;
     }
   </style>
 </head>
@@ -92,44 +182,102 @@
       <img src="1ind.png" alt="WIIST ID Profile Picture">
       <h1>WIIST ID</h1>
     </div>
-    <a id="youtubeLink" href="https://youtu.be/5qD4uq2NF-c?si=96VzdlxdUBAQgvAV">
-      👉▶ Tonton Versi Full👈
-    </a>
+
+    <div class="videos">
+
+      <!-- VIDEO 1 - Viral video -->
+      <div class="video-card">
+        <a id="link1" href="https://youtu.be/5qD4uq2NF-c">
+          <div class="thumbnail-wrap">
+            <img src="https://img.youtube.com/vi/5qD4uq2NF-c/maxresdefault.jpg" alt="Video 1 thumbnail"
+              onerror="this.src='https://img.youtube.com/vi/5qD4uq2NF-c/hqdefault.jpg'">
+            <div class="play-overlay">
+              <div class="play-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+              </div>
+            </div>
+            <span class="badge">🔥 Viral</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-title loading" id="title1"> </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- VIDEO 2 - New video -->
+      <div class="video-card">
+        <a id="link2" href="https://youtu.be/JQ4lCrtw9Jo">
+          <div class="thumbnail-wrap">
+            <img src="https://img.youtube.com/vi/JQ4lCrtw9Jo/maxresdefault.jpg" alt="Video 2 thumbnail"
+              onerror="this.src='https://img.youtube.com/vi/JQ4lCrtw9Jo/hqdefault.jpg'">
+            <div class="play-overlay">
+              <div class="play-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                  <polygon points="5,3 19,12 5,21"/>
+                </svg>
+              </div>
+            </div>
+            <span class="badge" style="background:#333; border: 1px solid #555;">✨ Terbaru</span>
+          </div>
+          <div class="card-footer">
+            <div class="card-label">Video terbaru</div>
+            <div class="card-title loading" id="title2"> </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
   </div>
 
   <script>
-    function detectDeviceAndSetLink() {
-      const userAgent = navigator.userAgent.toLowerCase();
-      const isApple = /iphone|ipad|ipod|mac/.test(userAgent);
-      const isAndroid = /android/.test(userAgent);
-      
-      const link = document.getElementById('youtubeLink');
-      const videoId = '5qD4uq2NF-c';
-      const youtubeWebUrl = 'https://www.youtube.com/watch?v=' + videoId;
-      
+    function getYouTubeLink(videoId, deviceType) {
+      const webUrl = 'https://www.youtube.com/watch?v=' + videoId;
+      if (deviceType === 'android') {
+        return 'intent://www.youtube.com/watch?v=' + videoId + '#Intent;package=com.google.android.youtube;scheme=https;end';
+      }
+      return webUrl;
+    }
+
+    function setupLink(linkEl, videoId) {
+      const ua = navigator.userAgent.toLowerCase();
+      const isAndroid = /android/.test(ua);
+      const webUrl = 'https://www.youtube.com/watch?v=' + videoId;
+
       if (isAndroid) {
-        // Android: Try YouTube app first, fallback to web browser
-        link.href = 'intent://www.youtube.com/watch?v=' + videoId + '#Intent;package=com.google.android.youtube;scheme=https;end';
-        link.onclick = function(e) {
+        linkEl.href = getYouTubeLink(videoId, 'android');
+        linkEl.onclick = function(e) {
           e.preventDefault();
-          // Try the intent, if it fails redirect to web URL
-          window.location.href = link.href;
-          setTimeout(function() {
-            window.location.href = youtubeWebUrl;
-          }, 500);
+          window.location.href = linkEl.href;
+          setTimeout(function() { window.location.href = webUrl; }, 500);
           return false;
         };
-      } else if (isApple) {
-        // Apple: Use YouTube app scheme or standard https link
-        link.href = 'https://www.youtube.com/watch?v=' + videoId;
       } else {
-        // Desktop or other: Use standard https link
-        link.href = youtubeWebUrl;
+        linkEl.href = webUrl;
       }
     }
-    
-    // Run on page load
-    detectDeviceAndSetLink();
+
+    setupLink(document.getElementById('link1'), '5qD4uq2NF-c');
+    setupLink(document.getElementById('link2'), 'JQ4lCrtw9Jo');
+
+    async function fetchTitle(videoId, titleElId) {
+      const el = document.getElementById(titleElId);
+      try {
+        const res = await fetch('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId);
+        const data = await res.json();
+        if (data.title) {
+          el.textContent = data.title;
+          el.classList.remove('loading');
+        }
+      } catch (e) {
+        el.textContent = '';
+        el.classList.remove('loading');
+      }
+    }
+
+    fetchTitle('5qD4uq2NF-c', 'title1');
+    fetchTitle('JQ4lCrtw9Jo', 'title2');
   </script>
 </body>
 </html>
