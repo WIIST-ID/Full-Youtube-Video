@@ -209,10 +209,10 @@
 
       <!-- VIDEO 1 -->
       <div class="video-card shake-card">
-        <a id="link2" href="https://youtu.be/JQ4lCrtw9Jo">
+        <a id="link2" href="https://youtu.be/HPaSY2tO0U4">
           <div class="thumbnail-wrap">
-            <img src="https://img.youtube.com/vi/JQ4lCrtw9Jo/maxresdefault.jpg" alt="Video 2 thumbnail"
-              onerror="this.src='https://img.youtube.com/vi/JQ4lCrtw9Jo/hqdefault.jpg'">
+            <img src="https://img.youtube.com/vi/HPaSY2tO0U4/maxresdefault.jpg" alt="Video 2 thumbnail"
+              onerror="this.src='https://img.youtube.com/vi/HPaSY2tO0U4/hqdefault.jpg'">
             <div class="play-overlay">
               <div class="play-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -233,10 +233,10 @@
 
       <!-- VIDEO 2 - Viral video -->
       <div class="video-card">
-        <a id="link1" href="https://youtu.be/5qD4uq2NF-c">
+        <a id="link1" href="https://youtu.be/JQ4lCrtw9Jo">
           <div class="thumbnail-wrap">
-            <img src="https://img.youtube.com/vi/5qD4uq2NF-c/maxresdefault.jpg" alt="Video 1 thumbnail"
-              onerror="this.src='https://img.youtube.com/vi/5qD4uq2NF-c/hqdefault.jpg'">
+            <img src="https://img.youtube.com/vi/JQ4lCrtw9Jo/maxresdefault.jpg" alt="Video 1 thumbnail"
+              onerror="this.src='https://img.youtube.com/vi/JQ4lCrtw9Jo/hqdefault.jpg'">
             <div class="play-overlay">
               <div class="play-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
@@ -281,8 +281,8 @@
       }
     }
 
-    setupLink(document.getElementById('link1'), '5qD4uq2NF-c');
-    setupLink(document.getElementById('link2'), 'JQ4lCrtw9Jo');
+    setupLink(document.getElementById('link1'), 'JQ4lCrtw9Jo');
+    setupLink(document.getElementById('link2'), 'HPaSY2tO0U4');
 
     async function fetchTitle(videoId, titleElId) {
       const el = document.getElementById(titleElId);
@@ -299,8 +299,8 @@
       }
     }
 
-    fetchTitle('5qD4uq2NF-c', 'title1');
-    fetchTitle('JQ4lCrtw9Jo', 'title2');
+    fetchTitle('JQ4lCrtw9Jo', 'title1');
+    fetchTitle('HPaSY2tO0U4', 'title2');
   </script>
 </body>
 </html>
