@@ -25,10 +25,18 @@
       max-width: 380px;
     }
     .profile {
+      width: 100%;
+    }
+    .profile a {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 12px;
+      text-decoration: none;
+      transition: transform 0.2s ease;
+    }
+    .profile a:hover {
+      transform: scale(1.02);
     }
     .profile img {
       width: 100px;
@@ -201,60 +209,80 @@
 <body>
   <div class="container">
     <div class="profile">
-      <img src="1ind.png" alt="WIIST ID Profile Picture">
-      <h1>WIIST ID</h1>
+      <a id="profile-link" href="https://www.youtube.com/@WIIST-id">
+        <img src="1ind.png" alt="WIIST ID Profile Picture">
+        <h1>WIIST ID</h1>
+      </a>
     </div>
 
-    <div class="videos">
-
-      <!-- VIDEO 1 -->
-      <div class="video-card shake-card">
-        <a id="link2" href="https://youtu.be/HPaSY2tO0U4">
-          <div class="thumbnail-wrap">
-            <img src="https://img.youtube.com/vi/HPaSY2tO0U4/maxresdefault.jpg" alt="Video 2 thumbnail"
-              onerror="this.src='https://img.youtube.com/vi/HPaSY2tO0U4/hqdefault.jpg'">
-            <div class="play-overlay">
-              <div class="play-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                  <polygon points="5,3 19,12 5,21"/>
-                </svg>
-              </div>
-            </div>
-            <span class="badge" style="background:#333; border: 1px solid #555;">✨ Terbaru</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-label">Video terbaru</div>
-            <div class="card-title loading" id="title2"> </div>
-          </div>
-        </a>
-      </div>
-
-      
-
-      <!-- VIDEO 2 - Viral video -->
-      <div class="video-card">
-        <a id="link1" href="https://youtu.be/JQ4lCrtw9Jo">
-          <div class="thumbnail-wrap">
-            <img src="https://img.youtube.com/vi/JQ4lCrtw9Jo/maxresdefault.jpg" alt="Video 1 thumbnail"
-              onerror="this.src='https://img.youtube.com/vi/JQ4lCrtw9Jo/hqdefault.jpg'">
-            <div class="play-overlay">
-              <div class="play-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                  <polygon points="5,3 19,12 5,21"/>
-                </svg>
-              </div>
-            </div>
-            <span class="badge">🔥 Viral</span>
-          </div>
-          <div class="card-footer">
-            <div class="card-title loading" id="title1"> </div>
-          </div>
-        </a>
-      </div>
+    <div class="videos" id="video-container">
+      <!-- Video cards will be injected here automatically by the scripts below -->
     </div>
   </div>
 
   <script>
+    // ==============================================================================
+    // CONFIGURATION: Edit your videos here! (Just change the ID and labels)
+    // ==============================================================================
+    const VIDEOS = [
+      {
+        id: 'HPaSY2tO0U4', // <-- Change this ID to your new video ID
+        badge: '✨ Terbaru',
+        badgeStyle: 'background:#333; border: 1px solid #555;',
+        label: 'Video terbaru',
+        shake: true       // Set to true to make the card wiggle
+      },
+      {
+        id: 'JQ4lCrtw9Jo', // <-- Change this ID to your new video ID
+        badge: '🔥 Viral',
+        badgeStyle: '',
+        label: '',
+        shake: false
+      }
+    ];
+
+    // ==============================================================================
+    // LOGIC: Automatically renders the videos to screen (No need to edit below)
+    // ==============================================================================
+    function renderVideos() {
+      const container = document.getElementById('video-container');
+      
+      container.innerHTML = VIDEOS.map((video, index) => {
+        const shakeClass = video.shake ? 'shake-card' : '';
+        const labelHtml = video.label ? `<div class="card-label">${video.label}</div>` : '';
+        const badgeStyleAttr = video.badgeStyle ? `style="${video.badgeStyle}"` : '';
+        
+        return `
+          <div class="video-card ${shakeClass}">
+            <a id="link-${index}" href="https://youtu.be/${video.id}">
+              <div class="thumbnail-wrap">
+                <img src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg" alt="Video thumbnail"
+                  onerror="this.src='https://img.youtube.com/vi/${video.id}/hqdefault.jpg'">
+                <div class="play-overlay">
+                  <div class="play-icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                      <polygon points="5,3 19,12 5,21"/>
+                    </svg>
+                  </div>
+                </div>
+                <span class="badge" ${badgeStyleAttr}>${video.badge}</span>
+              </div>
+              <div class="card-footer">
+                ${labelHtml}
+                <div class="card-title loading" id="title-${index}"></div>
+              </div>
+            </a>
+          </div>
+        `;
+      }).join('');
+
+      // Attach the link routing and title fetching logic
+      VIDEOS.forEach((video, index) => {
+        setupLink(document.getElementById(`link-${index}`), video.id);
+        fetchTitle(video.id, `title-${index}`);
+      });
+    }
+
     function getYouTubeLink(videoId, deviceType) {
       const webUrl = 'https://www.youtube.com/watch?v=' + videoId;
       if (deviceType === 'android') {
@@ -264,6 +292,7 @@
     }
 
     function setupLink(linkEl, videoId) {
+      if (!linkEl) return;
       const ua = navigator.userAgent.toLowerCase();
       const isAndroid = /android/.test(ua);
       const webUrl = 'https://www.youtube.com/watch?v=' + videoId;
@@ -281,11 +310,9 @@
       }
     }
 
-    setupLink(document.getElementById('link1'), 'JQ4lCrtw9Jo');
-    setupLink(document.getElementById('link2'), 'HPaSY2tO0U4');
-
     async function fetchTitle(videoId, titleElId) {
       const el = document.getElementById(titleElId);
+      if (!el) return;
       try {
         const res = await fetch('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId);
         const data = await res.json();
@@ -294,13 +321,34 @@
           el.classList.remove('loading');
         }
       } catch (e) {
-        el.textContent = '';
+        el.textContent = 'Video Title';
         el.classList.remove('loading');
       }
     }
 
-    fetchTitle('JQ4lCrtw9Jo', 'title1');
-    fetchTitle('HPaSY2tO0U4', 'title2');
+    // Initialize the page on load
+    renderVideos();
+
+    // Setup profile link routing logic (works for Android, iOS, and Web)
+    const profileLink = document.getElementById('profile-link');
+    if (profileLink) {
+      const channelUrl = 'https://www.youtube.com/@WIIST-id';
+      const ua = navigator.userAgent.toLowerCase();
+      const isAndroid = /android/.test(ua);
+      
+      if (isAndroid) {
+        const intentUrl = 'intent://www.youtube.com/@WIIST-id#Intent;package=com.google.android.youtube;scheme=https;end';
+        profileLink.href = intentUrl;
+        profileLink.onclick = function(e) {
+          e.preventDefault();
+          window.location.href = profileLink.href;
+          setTimeout(function() { window.location.href = channelUrl; }, 500);
+          return false;
+        };
+      } else {
+        profileLink.href = channelUrl;
+      }
+    }
   </script>
 </body>
 </html>
