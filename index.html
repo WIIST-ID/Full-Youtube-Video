@@ -22,7 +22,7 @@
       align-items: center;
       gap: 24px;
       width: 100%;
-      max-width: 380px;
+      max-width: 480px;
     }
     .profile {
       width: 100%;
@@ -53,9 +53,9 @@
     }
  
     .videos {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
       width: 100%;
     }
  
@@ -65,9 +65,45 @@
       overflow: hidden;
       box-shadow: 0 4px 16px rgba(0,0,0,0.4);
       transition: transform 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
     .video-card:hover {
       transform: translateY(-2px);
+    }
+    
+    .video-card:first-child {
+      grid-column: 1 / -1;
+      width: 75%;
+      justify-self: center;
+    }
+    
+    .video-card:not(:first-child) .card-footer {
+      padding: 12px;
+    }
+    
+    .video-card:not(:first-child) .card-title {
+      font-size: 13px;
+      margin-bottom: 6px;
+      min-height: 18px;
+    }
+    
+    .video-card:not(:first-child) .play-icon {
+      width: 44px;
+      height: 44px;
+    }
+    
+    .video-card:not(:first-child) .play-icon svg {
+      width: 16px;
+      height: 16px;
+      margin-left: 2px;
+    }
+    
+    .video-card:not(:first-child) .badge {
+      font-size: 10px;
+      padding: 3px 6px;
+      bottom: 8px;
+      left: 8px;
     }
  
     .thumbnail-wrap {
@@ -226,14 +262,21 @@
     // ==============================================================================
     const VIDEOS = [
       {
-        id: 'HPaSY2tO0U4', // <-- Change this ID to your new video ID
+        id: '1evpONN2ib4', // Terbaru video
         badge: '✨ Terbaru',
         badgeStyle: 'background:#333; border: 1px solid #555;',
         label: 'Video terbaru',
         shake: true       // Set to true to make the card wiggle
       },
       {
-        id: 'JQ4lCrtw9Jo', // <-- Change this ID to your new video ID
+        id: 'HPaSY2tO0U4', // First viral video
+        badge: '🔥 Viral',
+        badgeStyle: '',
+        label: '',
+        shake: false
+      },
+      {
+        id: 'JQ4lCrtw9Jo', // Existing viral video
         badge: '🔥 Viral',
         badgeStyle: '',
         label: '',
